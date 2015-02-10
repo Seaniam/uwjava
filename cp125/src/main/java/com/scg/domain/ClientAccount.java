@@ -97,6 +97,7 @@ public class ClientAccount implements Account, Comparable<ClientAccount> {
     public int compareTo(ClientAccount other) {
 
         // Check name
+        // TODO: use name's compareTo method
         String thisName = this.name.toString(),
                otherName = other.name.toString();
 

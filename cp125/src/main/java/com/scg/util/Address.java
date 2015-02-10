@@ -117,4 +117,7 @@ public final class Address {
 
         return address.toString();
     }
+
+    //    TODO: add comparable for address because the concatenated address
+    //    might be broken if you don't control each piece of the name.
 }

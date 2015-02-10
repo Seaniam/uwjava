@@ -148,4 +148,7 @@ public class Name {
 
         return formattedName.toString();
     }
+
+//    TODO: add comparable for names because the concatenated name
+//    might be broken if you don't control each piece of the name.
 }

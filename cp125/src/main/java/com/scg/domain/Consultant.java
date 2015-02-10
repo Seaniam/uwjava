@@ -55,6 +55,7 @@ public class Consultant implements Comparable<Consultant> {
                otherName = other.getName().toString();
 
         // Check consultant name
+        // TODO: use compareTo method in Name class
         if (thisName.compareTo(otherName) > 0) {
             return 1;
         } else if (thisName.compareTo(otherName) < 0) {

@@ -28,6 +28,7 @@ public final class DateRange {
      */
     public DateRange(Date startDate, Date endDate) {
 
+        // TODO: throw an exception if start date is after end date.
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -41,6 +42,7 @@ public final class DateRange {
     public DateRange(int month, int year) {
 
         // Set start date
+//        TODO: abstract out to set min and set max
         Calendar cal = new GregorianCalendar(year,month, 1);
         cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
         cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));

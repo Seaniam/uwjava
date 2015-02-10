@@ -15,18 +15,27 @@ import java.util.*;
 public final class TimeCardListUtil {
 
     /**
+     * Prevent instantiation.
+     */
+    private TimeCardListUtil() {
+
+    }
+
+    /**
      * Sorts this list into ascending order, by the start date.
+     * Will use TimeCard's compareTo for natural sorting.
      *
-     * @param timeCards the list of time cards to sort
+     * @param timeCards the list of time cards to sort.
      */
     public static void sortByStartDate(List<TimeCard> timeCards) {
-        Collections.sort(timeCards, TimeCardListUtil.dateTimeCardComparator);
+        //Collections.sort(timeCards, TimeCardListUtil.dateTimeCardComparator);
+        Collections.sort(timeCards);
     }
 
     /**
      * Sorts this list into ascending order by consultant name.
      *
-     * @param timeCards the list of time cards to sort
+     * @param timeCards the list of time cards to sort.
      */
     public static void sortByConsultantName(List<TimeCard> timeCards) {
         TimeCardConsultantComparator tcComparator = new TimeCardConsultantComparator();
@@ -82,29 +91,29 @@ public final class TimeCardListUtil {
     /**
      * Static comparator for comparing TimeCards by date.
      */
-    public static Comparator<TimeCard> dateTimeCardComparator = new Comparator<TimeCard>() {
-
-        /**
-         * Compares two TimeCards by date.
-         * @param t1 The first TimeCard to compare.
-         * @param t2 the second TimeCard to compare.
-         * @return -1 if the first TimeCard date is before the second TimeCard date,
-         * 1 if the first TimeCard date is after the second TimeCard date, and 0
-         * if the TimeCards have the same exact date.
-         */
-        public int compare(TimeCard t1, TimeCard t2) {
-
-            Date date1 = t1.getWeekStartingDay(),
-                 date2 = t2.getWeekStartingDay();
-
-            if(date1.before(date2)) {
-                return -1;
-            } else if (date1.after(date2)) {
-                return 1;
-            }
-
-            return 0;
-        }
-    };
+//    public static Comparator<TimeCard> dateTimeCardComparator = new Comparator<TimeCard>() {
+//
+//        /**
+//         * Compares two TimeCards by date.
+//         * @param t1 The first TimeCard to compare.
+//         * @param t2 the second TimeCard to compare.
+//         * @return -1 if the first TimeCard date is before the second TimeCard date,
+//         * 1 if the first TimeCard date is after the second TimeCard date, and 0
+//         * if the TimeCards have the same exact date.
+//         */
+//        public int compare(TimeCard t1, TimeCard t2) {
+//
+//            Date date1 = t1.getWeekStartingDay(),
+//                 date2 = t2.getWeekStartingDay();
+//
+//            if(date1.before(date2)) {
+//                return -1;
+//            } else if (date1.after(date2)) {
+//                return 1;
+//            }
+//
+//            return 0;
+//        }
+//    };
 
 }
