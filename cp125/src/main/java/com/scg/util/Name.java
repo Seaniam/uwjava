@@ -7,7 +7,7 @@ package com.scg.util;
  * @version 4
  * @since 1/12/15
  */
-public class Name {
+public class Name implements Comparable<Name> {
 
     /** Name instance first name */
     private String firstName;
@@ -20,6 +20,9 @@ public class Name {
      * Creates a new instance of Name without initial values.
      */
     public Name() {
+        this.firstName = "";
+        this.middleName = "";
+        this.lastName = "";
     }
 
     /**
@@ -30,6 +33,7 @@ public class Name {
     public Name(String lastName, String firstName) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.middleName = "";
     }
 
     /**
@@ -149,6 +153,38 @@ public class Name {
         return formattedName.toString();
     }
 
-//    TODO: add comparable for names because the concatenated name
-//    might be broken if you don't control each piece of the name.
+    /**
+     * Compare this name to another. Returns a negative integer, zero, or a
+     * positive integer as this object is less than, equal to, or greater
+     * than the specified object, the consultant name is used to
+     * perform the comparison.
+     *
+     * @param other
+     * @return a negative integer, zero, or a positive integer as this
+     * object is less than, equal to, or greater than the specified object.
+     */
+    @Override
+    public int compareTo(Name other) {
+
+        if (this.lastName.compareTo(other.lastName) > 0) {
+            return 1;
+        } else if (this.lastName.compareTo(other.lastName) < 0) {
+            return -1;
+        }
+
+        if (this.middleName.compareTo(other.middleName) > 0) {
+            return 1;
+        } else if (this.middleName.compareTo(other.middleName) < 0) {
+            return -1;
+        }
+
+        if (this.firstName.compareTo(other.firstName) > 0) {
+            return 1;
+        } else if (this.firstName.compareTo(other.firstName) < 0) {
+            return -1;
+        }
+
+        return 0;
+    }
+
 }

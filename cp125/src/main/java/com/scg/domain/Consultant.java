@@ -2,6 +2,8 @@ package com.scg.domain;
 
 import com.scg.util.Name;
 
+import java.io.*;
+
 /**
  * A consultant.
  *
@@ -13,6 +15,27 @@ public class Consultant implements Comparable<Consultant> {
 
     /** Name of the consultant */
     private Name name;
+
+//    static final long serialVersionUID;
+//
+//    private static final ObjectStreamField[] serialPersistentFields = {
+//            new ObjectStreamField("x", Name.class)
+//    };
+
+
+    private void readObject(ObjectInputStream ois)
+            throws ClassNotFoundException, IOException {
+        ObjectInputStream.GetField fields = ois.readFields();
+        Name x = (Name) fields.get("x", "Foo");
+    }
+
+    private void writeObject(ObjectOutputStream oos)
+            throws IOException {
+        ObjectOutputStream.PutField fields = oos.putFields();
+        fields.put("x", name);
+        oos.writeFields();
+    }
+
 
     /**
      * Creates a new instance of a client.
@@ -51,18 +74,9 @@ public class Consultant implements Comparable<Consultant> {
      */
     @Override
     public int compareTo(Consultant other) {
-        String thisName = this.getName().toString(),
-               otherName = other.getName().toString();
+        Name thisName = this.getName(),
+             otherName = other.getName();
 
-        // Check consultant name
-        // TODO: use compareTo method in Name class
-        if (thisName.compareTo(otherName) > 0) {
-            return 1;
-        } else if (thisName.compareTo(otherName) < 0) {
-            return -1;
-        }
-
-        // else must be same
-        return 0;
+        return thisName.compareTo(otherName);
     }
 }

@@ -90,7 +90,7 @@ public class TimeCardTest {
     public void testGetConsultant() throws Exception {
         Consultant consultant = timeCard.getConsultant();
         assertEquals("Expect consultant's first name to be Tom", consultant.getName().getFirstName(), "Tom");
-        assertEquals("Expect consultant's middle name to be Null", consultant.getName().getMiddleName(), null);
+        assertEquals("Expect consultant's middle name to be Null", consultant.getName().getMiddleName(), "");
         assertEquals("Expect consultant's last name to be Tester", consultant.getName().getLastName(), "Tester");
     }
 

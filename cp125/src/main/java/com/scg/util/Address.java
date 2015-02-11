@@ -9,7 +9,7 @@ package com.scg.util;
  * @version 4
  * @since 1/27/15
  */
-public final class Address {
+public final class Address implements Comparable<Address> {
 
     /** The street number. */
     private final String streetNumber;
@@ -118,6 +118,51 @@ public final class Address {
         return address.toString();
     }
 
-    //    TODO: add comparable for address because the concatenated address
-    //    might be broken if you don't control each piece of the name.
+    /**
+     * Compares this Address with the specified Address.
+     *
+     * @param other the Address to be compared.
+     * @return a negative integer, zero, or a positive integer as this
+     * Address is less than, equal to, or greater than the specified Address.
+     */
+    @Override
+    public int compareTo(Address other) {
+        String zip = this.getPostalCode(),
+               otherzip = other.getPostalCode();
+
+        if (zip.compareTo(otherzip) > 0) {
+            return 1;
+        } else if (zip.compareTo(otherzip) < 0) {
+            return -1;
+        }
+
+        StateCode state = this.getState(),
+                  otherstate = other.getState();
+
+        if (state.compareTo(otherstate) > 0) {
+            return 1;
+        } else if (state.compareTo(otherstate) < 0) {
+            return -1;
+        }
+
+        String city = this.getCity(),
+               othercity = other.getCity();
+
+        if (city.compareTo(othercity) > 0) {
+            return 1;
+        } else if (city.compareTo(othercity) < 0) {
+            return -1;
+        }
+
+        String street = this.getStreetNumber(),
+               otherstreet = other.getStreetNumber();
+
+        if (street.compareTo(otherstreet) > 0) {
+            return 1;
+        } else if (street.compareTo(otherstreet) < 0) {
+            return -1;
+        }
+
+        return 0;
+    }
 }

@@ -31,7 +31,7 @@ public class NameTest {
 
     @Test
     public void testGetFirstName() throws Exception {
-        assertNull(noName.getFirstName());
+        assertEquals(noName.getFirstName(), "");
         assertEquals(twoName.getFirstName(), "Tina");
         assertEquals(threeName.getFirstName(), "Tyler");
     }
@@ -44,8 +44,8 @@ public class NameTest {
 
     @Test
     public void testGetMiddleName() throws Exception {
-        assertNull(noName.getMiddleName());
-        assertNull(twoName.getMiddleName());
+        assertEquals(noName.getMiddleName(), "");
+        assertEquals(twoName.getMiddleName(), "");
         assertEquals(threeName.getMiddleName(), "Threename");
     }
 
@@ -59,7 +59,7 @@ public class NameTest {
 
     @Test
     public void testGetLastName() throws Exception {
-        assertNull(noName.getLastName());
+        assertEquals(noName.getLastName(), "");
         assertEquals(twoName.getLastName(), "Testre");
         assertEquals(threeName.getLastName(), "Tester");
     }

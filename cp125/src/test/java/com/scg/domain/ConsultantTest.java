@@ -40,12 +40,12 @@ public class ConsultantTest {
         assertEquals(consultant.getName().getLastName(), "Coyote");
 
         assertEquals(consultantTwo.getName().getFirstName(), "Virginia");
-        assertNull(consultantTwo.getName().getMiddleName());
+        assertEquals(consultantTwo.getName().getMiddleName(), "");
         assertEquals(consultantTwo.getName().getLastName(), "Wolfe");
 
-        assertNull(consultantThree.getName().getFirstName());
-        assertNull(consultantThree.getName().getMiddleName());
-        assertNull(consultantThree.getName().getLastName());
+        assertEquals(consultantThree.getName().getFirstName(), "");
+        assertEquals(consultantThree.getName().getMiddleName(), "");
+        assertEquals(consultantThree.getName().getLastName(), "");
     }
 
     @Test

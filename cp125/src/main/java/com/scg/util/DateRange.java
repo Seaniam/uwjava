@@ -28,7 +28,10 @@ public final class DateRange {
      */
     public DateRange(Date startDate, Date endDate) {
 
-        // TODO: throw an exception if start date is after end date.
+        if (endDate.before(startDate)) {
+            throw new IllegalArgumentException("Start date can not be after end date.");
+        }
+
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -40,6 +43,7 @@ public final class DateRange {
      * @param year the calendar year.
      */
     public DateRange(int month, int year) {
+        Date start, end;
 
         // Set start date
 //        TODO: abstract out to set min and set max
@@ -49,7 +53,7 @@ public final class DateRange {
         cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
         cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 
-        this.startDate = cal.getTime();
+        start = cal.getTime();
 
         // Set end date
         cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
@@ -58,7 +62,14 @@ public final class DateRange {
         cal.set(Calendar.SECOND, cal.getActualMaximum(Calendar.SECOND));
         cal.set(Calendar.MILLISECOND, cal.getActualMaximum(Calendar.MILLISECOND));
 
-        this.endDate = cal.getTime();
+        end = cal.getTime();
+
+        if (end.before(start)) {
+            throw new IllegalArgumentException("Start date can not be after end date.");
+        }
+
+        this.startDate = start;
+        this.endDate = end;
     }
 
     /**
@@ -83,6 +94,9 @@ public final class DateRange {
             throw new IllegalArgumentException("a start date and end date must be provided");
         }
 
+        Date startDate = null,
+             endDate = null;
+
         Calendar cal = Calendar.getInstance();
 
         // Set start date
@@ -92,7 +106,7 @@ public final class DateRange {
         cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
         cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 
-        this.startDate = cal.getTime();
+        startDate = cal.getTime();
 
         // Set end date
         cal.setTime(eDate);
@@ -102,7 +116,14 @@ public final class DateRange {
         cal.set(Calendar.SECOND, cal.getActualMaximum(Calendar.SECOND));
         cal.set(Calendar.MILLISECOND, cal.getActualMaximum(Calendar.MILLISECOND));
 
-        this.endDate = cal.getTime();
+        endDate = cal.getTime();
+
+        if (endDate.before(startDate)) {
+            throw new IllegalArgumentException("Start date can not be after end date.");
+        }
+
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     /**

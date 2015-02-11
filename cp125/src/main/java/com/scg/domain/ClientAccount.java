@@ -97,9 +97,8 @@ public class ClientAccount implements Account, Comparable<ClientAccount> {
     public int compareTo(ClientAccount other) {
 
         // Check name
-        // TODO: use name's compareTo method
-        String thisName = this.name.toString(),
-               otherName = other.name.toString();
+        String thisName = this.name,
+               otherName = other.name;
 
         if(thisName.compareTo(otherName) > 0) {
             return 1;
@@ -108,8 +107,8 @@ public class ClientAccount implements Account, Comparable<ClientAccount> {
         }
 
         // Check contact
-        String thisContact = this.getContact().toString(),
-               otherContact = other.getContact().toString();
+        Name thisContact = this.getContact(),
+             otherContact = other.getContact();
 
         if(thisContact.compareTo(otherContact) > 0) {
             return 1;
@@ -118,8 +117,8 @@ public class ClientAccount implements Account, Comparable<ClientAccount> {
         }
 
         // Check address
-        String thisAddress = this.getAddress().toString(),
-               otherAddress = other.getAddress().toString();
+        Address thisAddress = this.getAddress(),
+                otherAddress = other.getAddress();
 
         if(thisAddress.compareTo(otherAddress) > 0) {
             return 1;
