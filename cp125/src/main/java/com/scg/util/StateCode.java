@@ -1,5 +1,7 @@
 package com.scg.util;
 
+import java.io.Serializable;
+
 /**
  * U. S. Postal state codes.
  *
@@ -7,7 +9,7 @@ package com.scg.util;
  * @version 4
  * @since 1/27/15
  */
-public enum StateCode {
+public enum StateCode implements Serializable {
     AK("Alaska"),
     AL("Alabama"),
     AR("Arkansas"),
@@ -68,7 +70,7 @@ public enum StateCode {
     WV("West Virginia"),
     WY("Wyoming");
 
-    /** state code **/
+    /** state code */
     private String stateCode;
 
      StateCode(String stateCode) {

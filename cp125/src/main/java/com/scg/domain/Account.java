@@ -1,5 +1,7 @@
 package com.scg.domain;
 
+import java.io.Serializable;
+
 /**
  * Describes the implementation for an Account
  *
@@ -7,7 +9,7 @@ package com.scg.domain;
  * @version 4
  * @since 1/12/15
  */
-public interface Account {
+public interface Account extends Serializable {
 
     /**
      * Getter for the name of the account.

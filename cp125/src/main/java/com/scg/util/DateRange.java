@@ -1,5 +1,6 @@
 package com.scg.util;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,10 +15,14 @@ import java.util.GregorianCalendar;
  * @version 4
  * @since 2/2/15
  */
-public final class DateRange {
+public final class DateRange implements Serializable {
+
+    /** Unique serialization ID */
+    private static final long serialVersionUID = -3575652570006844000L;
 
     /** start date **/
     private final Date startDate;
+
     /** end date **/
     private final Date endDate;
 

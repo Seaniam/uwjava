@@ -2,6 +2,7 @@ package com.scg.domain;
 
 import com.scg.util.FormatHelper;
 
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,17 +15,23 @@ import java.util.Locale;
  * @version 4
  * @since 1/26/15
  */
-public class InvoiceLineItem {
+public class InvoiceLineItem implements Serializable {
+
+    /** Unique serialization ID */
+    private static final long serialVersionUID = -2257392872349703982L;
 
     /** date format **/
     SimpleDateFormat ROW_DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy");
 
     /** This invoice line item's date **/
     private Date date;
+
     /** the consultant who worked **/
     private Consultant consultant;
+
     /** the skill employed on this item **/
     private Skill skill;
+
     /** number of hours worked **/
     private int hours;
 

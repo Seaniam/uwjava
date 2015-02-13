@@ -6,6 +6,7 @@ import com.scg.util.FormatHelper;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -18,20 +19,29 @@ import java.util.*;
  * @version 4
  * @since 1/27/15
  */
-public final class Invoice {
+public final class Invoice implements Serializable {
+
+    /** serialization UID */
+    private static final long serialVersionUID = 5277630064251969734L;
 
     /** Property containing the invoicing business name. */
     static String BUSINESS_NAME_PROP;
+
     /** Property containing the invoicing business city. */
     static String BUSINESS_CITY_PROP;
+
     /** Property containing the invoicing business state. */
     static String BUSINESS_STATE_PROP;
+
     /** Property containing the invoicing business street address. */
     static String BUSINESS_STREET_PROP;
+
     /** Property containing the invoicing business zip or postal code. */
     static String BUSINESS_ZIP_PROP;
+
     /** String constant for "N/A". */
     static String NA;
+
     /** Name of property file containing invoicing business info. */
     static String PROP_FILE_NAME;
 
@@ -40,8 +50,10 @@ public final class Invoice {
 
     /** client */
     private final ClientAccount client;
+
     /** month invoice was delivered */
     private final int invoiceMonth;
+
     /** year invoice was delivered */
     private final int invoiceYear;
 
@@ -53,8 +65,10 @@ public final class Invoice {
 
     /** invoice hour totals **/
     private int totalHours;
+
     /** invoice charge totals **/
     private int totalCharges;
+
     /** list of line items that are billable for this invoice **/
     private ArrayList<InvoiceLineItem> invoiceLineItems = new ArrayList<InvoiceLineItem>();
 
@@ -190,6 +204,10 @@ public final class Invoice {
         return letterHead.toString();
     }
 
+    /**
+     * String representation of Invoice.
+     * @return a string representation of the invoice.
+     */
     @Override
     public String toString() {
         return "Invoice{" +

@@ -1,5 +1,7 @@
 package com.scg.domain;
 
+import java.io.Serializable;
+
 /**
  * Encapsulates a billable skill.
  *
@@ -7,7 +9,7 @@ package com.scg.domain;
  * @version 4
  * @since 1/12/15
  */
-public enum Skill {
+public enum Skill implements Serializable {
     PROJECT_MANAGER("Project Manager", 250),
     SOFTWARE_ENGINEER("Software Engineer", 150),
     SOFTWARE_TESTER("Software Tester", 100),
@@ -16,6 +18,7 @@ public enum Skill {
 
     /** rate property */
     private int rate;
+
     /** skill type property */
     private String skillType;
 

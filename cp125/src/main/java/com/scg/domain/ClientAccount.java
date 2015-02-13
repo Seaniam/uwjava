@@ -3,6 +3,8 @@ package com.scg.domain;
 import com.scg.util.Address;
 import com.scg.util.Name;
 
+import java.io.Serializable;
+
 /**
  * Encapsulates the information for a billable client account.
  *
@@ -12,10 +14,15 @@ import com.scg.util.Name;
  */
 public class ClientAccount implements Account, Comparable<ClientAccount> {
 
+    /** Serialization Unique ID */
+    private static final long serialVersionUID = -8204125911580745185L;
+
     /** account name */
     private String name;
+
     /** account contact */
     private Name contact;
+
     /** account address */
     private Address address;
 

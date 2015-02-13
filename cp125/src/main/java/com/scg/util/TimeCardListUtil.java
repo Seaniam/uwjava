@@ -28,7 +28,6 @@ public final class TimeCardListUtil {
      * @param timeCards the list of time cards to sort.
      */
     public static void sortByStartDate(List<TimeCard> timeCards) {
-        //Collections.sort(timeCards, TimeCardListUtil.dateTimeCardComparator);
         Collections.sort(timeCards);
     }
 
@@ -65,7 +64,6 @@ public final class TimeCardListUtil {
 
     }
 
-
     /**
      * Get a list of TimeCards for the specified consultant.
      *
@@ -86,34 +84,4 @@ public final class TimeCardListUtil {
 
         return timeCardList;
     }
-
-
-    /**
-     * Static comparator for comparing TimeCards by date.
-     */
-//    public static Comparator<TimeCard> dateTimeCardComparator = new Comparator<TimeCard>() {
-//
-//        /**
-//         * Compares two TimeCards by date.
-//         * @param t1 The first TimeCard to compare.
-//         * @param t2 the second TimeCard to compare.
-//         * @return -1 if the first TimeCard date is before the second TimeCard date,
-//         * 1 if the first TimeCard date is after the second TimeCard date, and 0
-//         * if the TimeCards have the same exact date.
-//         */
-//        public int compare(TimeCard t1, TimeCard t2) {
-//
-//            Date date1 = t1.getWeekStartingDay(),
-//                 date2 = t2.getWeekStartingDay();
-//
-//            if(date1.before(date2)) {
-//                return -1;
-//            } else if (date1.after(date2)) {
-//                return 1;
-//            }
-//
-//            return 0;
-//        }
-//    };
-
 }

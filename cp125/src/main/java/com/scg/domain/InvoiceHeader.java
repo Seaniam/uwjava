@@ -16,17 +16,22 @@ final class InvoiceHeader {
 
     /** Constant for invoice month formatting **/
     SimpleDateFormat DATE_FORMAT_MONTH = new SimpleDateFormat("MMMM yyyy");
+
     /** Constant for invoice date formatting **/
     SimpleDateFormat INVOICE_DATE_FORMAT = new SimpleDateFormat("MMMM dd, yyyy");
 
     /** Business name **/
     private final String businessName;
+
     /** Address of business **/
     private final Address businessAddress;
+
     /** Client account **/
     private final ClientAccount client;
+
     /** Date invoice was issued **/
     private final Date invoiceDate;
+
     /** Date month to be billed for **/
     private final Date invoiceForMonth;
 
@@ -50,7 +55,6 @@ final class InvoiceHeader {
         this.invoiceDate = invoiceDate;
         this.invoiceForMonth = invoiceForMonth;
     }
-
 
     /**
      * Print this InvoiceHeader.

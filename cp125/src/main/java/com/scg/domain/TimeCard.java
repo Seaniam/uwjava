@@ -2,6 +2,7 @@ package com.scg.domain;
 
 import com.scg.util.FormatHelper;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,23 +15,32 @@ import java.util.List;
  * @version 4
  * @since 1/12/15
  */
-public class TimeCard implements Comparable<TimeCard> {
+public class TimeCard implements Comparable<TimeCard>, Serializable {
+
+    /** Unique serialization ID */
+    private static final long serialVersionUID = 8237137652611791100L;
 
     /** Constant for date formatter. */
     SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM dd, yyyy");
+
     /** Constant for row date formatter. */
     SimpleDateFormat ROW_DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy");
 
     /** Consultant who worked on this time card. */
     private Consultant consultant;
+
     /** Date stated working. */
     private Date weekStartingDay = null;
+
     /** Total hours worked. */
     private int totalHours = 0;
+
     /** Total billable hours worked. */
     private int totalBillableHours = 0;
+
     /** Total non-billable hours worked. */
     private int totalNonBillableHours = 0;
+
     /** List for consulting hour lines */
     private List<ConsultantTime> consultingHours = new ArrayList<ConsultantTime>();
 

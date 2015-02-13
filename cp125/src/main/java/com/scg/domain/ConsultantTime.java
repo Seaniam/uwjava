@@ -1,5 +1,6 @@
 package com.scg.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,14 +10,20 @@ import java.util.Date;
  * @version 4
  * @since 1/12/15
  */
-public final class ConsultantTime {
+public final class ConsultantTime implements Serializable {
+
+    /** Serialization UID **/
+    private static final long serialVersionUID = -1754022357226785353L;
 
     /** Date consultant worked. */
     private Date date;
+
     /** Consultant's skill type. */
     private Skill skillType;
+
     /** Hours consultant worked on account. */
     private int hours;
+
     /** Account consultant worked on. */
     private Account account;
 

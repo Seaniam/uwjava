@@ -1,5 +1,7 @@
 package com.scg.util;
 
+import java.io.Serializable;
+
 /**
  * A simple mailing address.
  * Does no validity checking for things like valid states or postal codes.
@@ -9,14 +11,20 @@ package com.scg.util;
  * @version 4
  * @since 1/27/15
  */
-public final class Address implements Comparable<Address> {
+public final class Address implements Comparable<Address>, Serializable {
+
+    /** Unique serialization ID */
+    private static final long serialVersionUID = -5751318509810721687L;
 
     /** The street number. */
     private final String streetNumber;
+
     /** The city */
     private final String city;
+
     /** The state code enum. */
     private final StateCode state;
+
     /** the postal code. */
     private final String postalCode;
 

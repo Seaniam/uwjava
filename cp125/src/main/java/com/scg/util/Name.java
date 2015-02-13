@@ -1,5 +1,7 @@
 package com.scg.util;
 
+import java.io.Serializable;
+
 /**
  * Encapsulates the name of a person (first, middle and last).
  *
@@ -7,12 +9,17 @@ package com.scg.util;
  * @version 4
  * @since 1/12/15
  */
-public class Name implements Comparable<Name> {
+public class Name implements Comparable<Name>, Serializable {
+
+    /** Unique serialization ID */
+    private static final long serialVersionUID = 634346203152087202L;
 
     /** Name instance first name */
     private String firstName;
+
     /** Name instance middle name */
     private String middleName;
+
     /** Name instance last name */
     private String lastName;
 

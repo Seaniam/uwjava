@@ -1,6 +1,8 @@
 package com.scg.domain;
 
 import com.scg.util.Name;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
@@ -11,31 +13,13 @@ import java.io.*;
  * @version 4
  * @since 1/12/15
  */
-public class Consultant implements Comparable<Consultant> {
+public class Consultant implements Comparable<Consultant>, Serializable {
 
-    /** Name of the consultant */
+    /**
+     * Name of the consultant
+     * @serial
+     */
     private Name name;
-
-//    static final long serialVersionUID;
-//
-//    private static final ObjectStreamField[] serialPersistentFields = {
-//            new ObjectStreamField("x", Name.class)
-//    };
-
-
-    private void readObject(ObjectInputStream ois)
-            throws ClassNotFoundException, IOException {
-        ObjectInputStream.GetField fields = ois.readFields();
-        Name x = (Name) fields.get("x", "Foo");
-    }
-
-    private void writeObject(ObjectOutputStream oos)
-            throws IOException {
-        ObjectOutputStream.PutField fields = oos.putFields();
-        fields.put("x", name);
-        oos.writeFields();
-    }
-
 
     /**
      * Creates a new instance of a client.
@@ -62,6 +46,9 @@ public class Consultant implements Comparable<Consultant> {
         return name.toString();
     }
 
+    /** This class' logger. */
+    private static final Logger log = LoggerFactory.getLogger("Consultant");
+
     /**
      * Compares this Consultant object with the specified object for order.
      * Returns a negative integer, zero, or a positive integer as this object
@@ -79,4 +66,65 @@ public class Consultant implements Comparable<Consultant> {
 
         return thisName.compareTo(otherName);
     }
+
+    /**
+     * Writes to an object output stream the fields in Consultant.
+     * @param oos An Object Output Stream.
+     * @throws IOException
+     */
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        ObjectOutputStream.PutField fields = oos.putFields();
+        fields.put("x", name);
+        oos.writeFields();
+    }
+
+    /**
+     * Nominates the replacement of Consultant serialization.
+     * @return the SerializationProxy.
+     */
+    private Object writeReplace() {
+        log.info("Serializing " + this.getName().toString());
+        return new SerializationProxy(this);
+    }
+
+    /**
+     * Validate before deserialization.
+     * @param ois ObjectInputStream.
+     * @throws InvalidObjectException
+     */
+    private void readObject(ObjectInputStream ois) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
+    }
+
+    /**
+     * A serialization replacement for Consultant.
+     */
+    private static class SerializationProxy implements Serializable {
+        /** Serialization version UID */
+        private static final long serialVersionUID = -5790567275048647124L;
+
+        /** Logger for the serialization class */
+        private static final Logger log = LoggerFactory.getLogger("SerializationProxy");
+
+        /** Name field */
+        private Name x;
+
+        /**
+         * Constructor for serialization proxy.
+         * @param consultant the Consultant object to serialize.
+         */
+        SerializationProxy(final Consultant consultant) {
+            x = consultant.name;
+        }
+
+        /**
+         * Returns the instance of Consultant when deserialization occurs.
+         * @return a deserialized Consultant object.
+         */
+        private Object readResolve() {
+            log.info("Deserializing: " + x.toString());
+            return new Consultant(x);
+        }
+    }
+
 }
