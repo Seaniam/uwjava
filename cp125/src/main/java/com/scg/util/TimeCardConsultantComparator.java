@@ -1,5 +1,6 @@
 package com.scg.util;
 
+import com.scg.domain.Consultant;
 import com.scg.domain.TimeCard;
 
 import java.util.Comparator;
@@ -28,13 +29,13 @@ public final class TimeCardConsultantComparator implements Comparator<TimeCard> 
     public int compare(TimeCard firstTimeCard, TimeCard secondTimeCard) {
 
         // Check consultant
-        String firstConsultant = firstTimeCard.getConsultant().getName().toString(),
-               secondConsultant = secondTimeCard.getConsultant().getName().toString();
+        Consultant firstConsultant = firstTimeCard.getConsultant(),
+                   secondConsultant = secondTimeCard.getConsultant();
 
-        if (firstConsultant.compareTo(secondConsultant) > 0) {
-            return 1;
-        } else if (firstConsultant.compareTo(secondConsultant) < 0) {
-            return -1;
+        int consultantCompare = firstConsultant.compareTo(secondConsultant);
+
+        if (consultantCompare != 0) {
+            return consultantCompare;
         }
 
         // Check work week

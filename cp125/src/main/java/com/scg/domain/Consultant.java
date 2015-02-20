@@ -61,10 +61,35 @@ public class Consultant implements Comparable<Consultant>, Serializable {
      */
     @Override
     public int compareTo(Consultant other) {
-        Name thisName = this.getName(),
-             otherName = other.getName();
+        String thisLast = this.getName().getLastName(),
+               otherLast = other.getName().getLastName();
 
-        return thisName.compareTo(otherName);
+        if (thisLast.compareTo(otherLast) > 0) {
+            return 1;
+        } else if (thisLast.compareTo(otherLast) < 0) {
+            return -1;
+        }
+
+        String thisMiddle = this.getName().getMiddleName(),
+               otherMiddle = other.getName().getMiddleName();
+
+        if (thisMiddle.compareTo(otherMiddle) > 0) {
+            return 1;
+        } else if (thisMiddle.compareTo(otherMiddle) < 0) {
+            return -1;
+        }
+
+        String thisFirst = this.getName().getFirstName(),
+               otherFirst = other.getName().getFirstName();
+
+        if (thisFirst.compareTo(otherFirst) > 0) {
+            return 1;
+        } else if (thisFirst.compareTo(otherFirst) < 0) {
+            return -1;
+        }
+
+        // otherwise, they are identical
+        return 0;
     }
 
     /**
