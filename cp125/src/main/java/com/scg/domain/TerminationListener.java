@@ -1,0 +1,27 @@
+package com.scg.domain;
+
+import java.util.EventListener;
+
+/**
+ * Interface for accepting notification of consultant terminations.
+ *
+ * @author Sean Carberry
+ * @version 6
+ * @since 2/20/15
+ */
+public interface TerminationListener extends EventListener {
+
+    /**
+     * Invoked when a consultant is voluntarily terminated.
+     * @param evt the termination event
+     */
+    void voluntaryTermination(TerminationEvent evt);
+
+    /**
+     * Invoked when a consultant is involuntarily terminated.
+     * @param evt the termination event
+     */
+    void forcedTermination(TerminationEvent evt);
+
+}
+
