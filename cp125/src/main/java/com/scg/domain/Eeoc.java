@@ -1,5 +1,8 @@
 package com.scg.domain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The EEOC monitors SCG's terminations.
  *
@@ -12,6 +15,9 @@ public final class Eeoc implements TerminationListener {
     private int forcedTerminationCount = 0;
     private int voluntaryTerminationCount = 0;
 
+    /** This class' logger. */
+    private static final Logger log = LoggerFactory.getLogger("Termination");
+
     /**
      * Simply prints a message indicating that the consultant quit.
      * @param evt the termination event.
@@ -19,6 +25,7 @@ public final class Eeoc implements TerminationListener {
     @Override
     public void voluntaryTermination(TerminationEvent evt) {
         this.voluntaryTerminationCount += 1;
+        log.info(evt.getConsultant().getName().toString() + " quit.");
     }
 
     /**
@@ -28,6 +35,7 @@ public final class Eeoc implements TerminationListener {
     @Override
     public void forcedTermination(TerminationEvent evt) {
         this.forcedTerminationCount += 1;
+        log.info(evt.getConsultant().getName().toString() + " was fired.");
     }
 
     /**

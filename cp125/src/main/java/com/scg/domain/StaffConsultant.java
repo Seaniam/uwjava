@@ -37,7 +37,7 @@ public final class StaffConsultant extends Consultant implements Serializable {
     private EventListenerList listenerList = new EventListenerList();
 
     /** vetoable change support listeners */
-    private VetoableChangeSupport vceListener = new VetoableChangeSupport(this);
+    private VetoableChangeSupport vceListeners = new VetoableChangeSupport(this);
 
 
     /**
@@ -50,13 +50,9 @@ public final class StaffConsultant extends Consultant implements Serializable {
      */
     public StaffConsultant(Name name, int rate, int sickLeave, int vacation) {
         super(name);
-        try {
-            this.setPayRate(rate);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        }
-        this.setSickLeaveHours(sickLeave);
-        this.setVacationHours(vacation);
+        this.payRate = rate;
+        this.sickLeaveHours = sickLeave;
+        this.vacationHours = vacation;
     }
 
     /**
@@ -75,23 +71,18 @@ public final class StaffConsultant extends Consultant implements Serializable {
     public void setPayRate(int payRate) throws PropertyVetoException {
         int oldPayRate = getPayRate();
 
-        // Ensure payrate isn't less than 0 and that the increase doesn't exceed 5%
-        if (payRate <= 0) {
-            PropertyChangeEvent e = new PropertyChangeEvent(this, "Minimum pay must be greater than 0", null, payRate);
-            throw new PropertyVetoException("Pay rate less than 0.", e);
-        } else if (oldPayRate != 0 && payRate > (oldPayRate * 1.05)) {
-            PropertyChangeEvent e = new PropertyChangeEvent(this, "Can not raise pay greater than 5%", null, payRate);
-            throw new PropertyVetoException("Pay rate increase greater than 5%.", e);
+        if (payRate < 0) {
+            throw new IllegalArgumentException("Pay rate must be a positive value.");
         }
 
-        // defer to the support handler
-        vceListener.fireVetoableChange(PAY_RATE_PROPERTY_NAME, this.payRate, payRate);
-
-        // no exception, fire property change event
-        PropertyChangeEvent evt = new PropertyChangeEvent(this, PAY_RATE_PROPERTY_NAME, this.payRate, payRate);
-        firePropertyChangeEvent(evt);
-        this.payRate = payRate;
-
+        try {
+            vceListeners.fireVetoableChange(PAY_RATE_PROPERTY_NAME, oldPayRate, payRate);
+            PropertyChangeEvent evt = new PropertyChangeEvent(this, PAY_RATE_PROPERTY_NAME, this.payRate, payRate);
+            firePropertyChangeEvent(evt);
+            this.payRate = payRate;
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -143,7 +134,8 @@ public final class StaffConsultant extends Consultant implements Serializable {
      * @param l the listener
      */
     public void addVetoableChangeListener(VetoableChangeListener l) {
-        listenerList.add(VetoableChangeListener.class, l);
+//        listenerList.add(VetoableChangeListener.class, l);
+            vceListeners.addVetoableChangeListener(l);
     }
 
     /**
@@ -151,7 +143,8 @@ public final class StaffConsultant extends Consultant implements Serializable {
      * @param l the listener
      */
     public void removeVetoableChangeListener(VetoableChangeListener l) {
-        listenerList.remove(VetoableChangeListener.class, l);
+//        listenerList.remove(VetoableChangeListener.class, l);
+        vceListeners.removeVetoableChangeListener(l);
     }
 
     /**
@@ -163,7 +156,7 @@ public final class StaffConsultant extends Consultant implements Serializable {
     }
 
     /**
-     * Set the sick leave hours. Fires the ProperrtyChange event.
+     * Set the sick leave hours. Fires the PropertyChange event.
      * @param sickLeaveHours the available sick leave hours.
      */
     public void setSickLeaveHours(int sickLeaveHours) {

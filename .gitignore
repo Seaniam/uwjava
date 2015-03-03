@@ -3,3 +3,5 @@ cp125/.idea/*
 cp125/*.txt
 cp125/*.ser
 cp125/cp125.iml
+*.DS_Store
+*/.DS_Store

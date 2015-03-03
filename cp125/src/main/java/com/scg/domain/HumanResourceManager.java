@@ -1,5 +1,8 @@
 package com.scg.domain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.swing.event.EventListenerList;
 import java.beans.PropertyVetoException;
 
@@ -15,6 +18,9 @@ public final class HumanResourceManager {
     /** list of event listeners */
     private EventListenerList listenerList = new EventListenerList();
 
+    /** This class' logger. */
+    private static final Logger log = LoggerFactory.getLogger("HumanResourceManager");
+
     /**
      * Constructor.
      */
@@ -26,7 +32,11 @@ public final class HumanResourceManager {
      * @param newPayRate the new pay rate for the consultant.
      */
     public void adjustPayRate(StaffConsultant c, int newPayRate) {
+        int oldPay = c.getPayRate();
+        double rate = (double) (newPayRate - oldPay)/oldPay;
+
         try {
+            log.info("% change = (" + newPayRate + " - " + oldPay + ")/" + oldPay + " = " + rate);
             c.setPayRate(newPayRate);
         } catch (PropertyVetoException e) {
             e.printStackTrace();

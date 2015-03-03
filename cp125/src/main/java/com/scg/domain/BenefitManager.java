@@ -29,6 +29,16 @@ public final class BenefitManager extends Object implements PropertyChangeListen
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        log.info(evt.getPropertyName().toString(), "New: " + evt.getNewValue().toString(), "Old: " + evt.getOldValue().toString());
+        StringBuilder changeEventLog = new StringBuilder();
+
+        changeEventLog.append(evt.getPropertyName().toString());
+        changeEventLog.append(" changed from ");
+        changeEventLog.append(evt.getOldValue());
+        changeEventLog.append(" to ");
+        changeEventLog.append(evt.getNewValue());
+        changeEventLog.append(" for ");
+        changeEventLog.append(evt.getSource());
+
+        log.info(changeEventLog.toString());
     }
 }
