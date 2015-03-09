@@ -4,13 +4,20 @@
     <groupId>com.scg</groupId>
     <artifactId>cp125</artifactId>
     <packaging>jar</packaging>
-    <version>06</version>
+    <version>07</version>
     <name>cp125</name>
     <url>http://maven.apache.org</url>
     <properties>
         <student>CarberrySF</student>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <repositories>
+        <repository>
+            <id>cp125-repository</id>
+            <name>Repository for CP125</name>
+            <url>http://faculty.washington.edu/rmoul/repository</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -22,6 +29,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
             <version>1.7.7</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.uw.ext</groupId>
+            <artifactId>cp125-support</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
     <build>

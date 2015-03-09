@@ -63,6 +63,14 @@ public class TimeCard implements Comparable<TimeCard>, Serializable {
     }
 
     /**
+     * Getter for consulting hours.
+     * @return the list of consulting hours.
+     */
+    public List<ConsultantTime> getConsultingHours() {
+        return consultingHours;
+    }
+
+    /**
      * Returns the billable hours (if any) in this TimeCard for the specified Client.
      * @param clientName name of client.
      * @return list of billable hours for the client.

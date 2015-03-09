@@ -122,6 +122,16 @@ public final class Invoice implements Serializable {
     }
 
     /**
+     * Add an invoice line item to this Invoice.
+     * @param lineItem InvoiceLineItem to add.
+     */
+    public void addLineItem(InvoiceLineItem lineItem) {
+        invoiceLineItems.add(lineItem);
+        totalHours += lineItem.getHours();
+        totalCharges += lineItem.getCharge();
+    }
+
+    /**
      * Extract the billable hours for this Invoice's client from
      * the input TimeCard and add them to the line items. Only
      * those hours for the client and month unique to this

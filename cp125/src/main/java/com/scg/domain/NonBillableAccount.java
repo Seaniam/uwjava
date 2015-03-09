@@ -16,14 +16,17 @@ public enum NonBillableAccount implements Account, Serializable {
     BUSINESS_DEVELOPMENT("Business Development");
 
     /** name of Account */
-    private String name;
+//    private String name;
+
+    private String nonBillableType;
 
     /**
      * Constructor for NonBillableAccount
      * @param nonBillableType String for non billable type
      */
     NonBillableAccount(String nonBillableType) {
-        this.name = nonBillableType;
+//        this.name = nonBillableType;
+        this.nonBillableType = nonBillableType;
     }
 
     /**
@@ -31,9 +34,9 @@ public enum NonBillableAccount implements Account, Serializable {
      *
      * @return the non-billable account type in string format.
      */
-    public String toString() {
-        return name;
-    }
+//    public String toString() {
+//        return name;
+//    }
 
     /**
      * Getter for the name of the account.
@@ -41,7 +44,7 @@ public enum NonBillableAccount implements Account, Serializable {
      */
     @Override
     public String getName() {
-        return name;
+        return nonBillableType;
     }
 
     /**

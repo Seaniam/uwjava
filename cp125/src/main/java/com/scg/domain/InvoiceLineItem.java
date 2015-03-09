@@ -42,7 +42,7 @@ public class InvoiceLineItem implements Serializable {
      * @param skill Skill for this line item.
      * @param hours Hours for this line item.
      */
-    InvoiceLineItem(Date date, Consultant consultant, Skill skill, int hours) {
+    public InvoiceLineItem(Date date, Consultant consultant, Skill skill, int hours) {
         if (hours < 0) {
             throw new IllegalArgumentException("Hours worked must be greater than 0.");
         }
