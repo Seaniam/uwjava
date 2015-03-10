@@ -2,11 +2,12 @@ package com.scg.persistent;
 
 import com.scg.domain.*;
 import com.scg.util.Address;
+import com.scg.util.DateRange;
 import com.scg.util.Name;
 import com.scg.util.StateCode;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.*;
 
 /**
@@ -15,7 +16,6 @@ import java.util.*;
  * @author Sean Carberry
  * @version 7
  * @since 3/3/15
- * TODO: Maybe there is a more efficient way of doing these connections (abstract to a method?)
  */
 public final class DbServer {
 
@@ -46,29 +46,32 @@ public final class DbServer {
      */
     public void addClient(ClientAccount client) throws SQLException, ClassNotFoundException {
         Connection conn = null;
-        Statement stmt = null;
+        PreparedStatement stmt = null;
 
         try{
 
             Class.forName(driverClassName);
             conn = DriverManager.getConnection(dbUrl, username, password);
 
-            stmt = conn.createStatement();
+//            stmt = conn.createStatement();
 
-            StringBuilder clientQuery = new StringBuilder();
-            clientQuery.append("INSERT INTO clients (name, street, city, state, postal_code, contact_last_name, contact_first_name, contact_middle_name) ");
-            clientQuery.append("VALUES (");
-            clientQuery.append("'" + client.getName().toString() + "', ");
-            clientQuery.append("'" + client.getAddress().getStreetNumber() + "', ");
-            clientQuery.append("'" + client.getAddress().getCity() + "', ");
-            clientQuery.append("'" + client.getAddress().getState() + "', ");
-            clientQuery.append("'" + client.getAddress().getPostalCode() + "', ");
-            clientQuery.append("'" + client.getContact().getLastName() + "', ");
-            clientQuery.append("'" + client.getContact().getFirstName() + "', ");
-            clientQuery.append("'" + client.getContact().getMiddleName() + "'");
-            clientQuery.append(")");
+//            TODO: try with prepared statements
+//            PreparedStatement ps = conn.prepareStaetments(SQLSTRING);
+            String clientQuery = "INSERT INTO clients (name, street, city, state, postal_code, contact_last_name, contact_first_name, contact_middle_name) " +
+                                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-            stmt.executeUpdate(clientQuery.toString());
+            stmt = conn.prepareStatement(clientQuery);
+
+            stmt.setString(1, client.getName().toString());
+            stmt.setString(2, client.getAddress().getStreetNumber());
+            stmt.setString(3, client.getAddress().getCity());
+            stmt.setString(4, client.getAddress().getState().toString());
+            stmt.setString(5, client.getAddress().getPostalCode());
+            stmt.setString(6, client.getContact().getLastName());
+            stmt.setString(7, client.getContact().getFirstName());
+            stmt.setString(8, client.getContact().getMiddleName());
+
+            stmt.executeUpdate();
 
         } catch(SQLException se) {
             //Handle errors for JDBC
@@ -113,10 +116,8 @@ public final class DbServer {
 
             stmt = conn.createStatement();
 
-            StringBuilder query = new StringBuilder();
-
-            query.append("SELECT name, street, city, state, postal_code, contact_last_name, contact_first_name, contact_middle_name ");
-            query.append("FROM clients");
+            String query = "SELECT name, street, city, state, postal_code, contact_last_name, contact_first_name, contact_middle_name " +
+                           "FROM clients";
 
             rs = stmt.executeQuery(query.toString());
 
@@ -164,25 +165,23 @@ public final class DbServer {
      */
     public void addConsultant(Consultant consultant) throws SQLException {
         Connection conn = null;
-        Statement stmt = null;
+        PreparedStatement stmt = null;
 
         try{
 
             Class.forName(driverClassName);
             conn = DriverManager.getConnection(dbUrl, username, password);
 
-            stmt = conn.createStatement();
+            String consultantQuery = "INSERT INTO consultants (last_name, first_name, middle_name) " +
+                                     "VALUES (?, ?, ?)";
 
-            StringBuilder consultantQuery = new StringBuilder();
+            stmt = conn.prepareStatement(consultantQuery);
 
-            consultantQuery.append("INSERT INTO consultants (last_name, first_name, middle_name) ");
-            consultantQuery.append("VALUES (");
-            consultantQuery.append("'" + consultant.getName().getLastName() + "', ");
-            consultantQuery.append("'" + consultant.getName().getFirstName() + "', ");
-            consultantQuery.append("'" + consultant.getName().getMiddleName() + "'");
-            consultantQuery.append(")");
+            stmt.setString(1, consultant.getName().getLastName());
+            stmt.setString(2, consultant.getName().getFirstName());
+            stmt.setString(3, consultant.getName().getMiddleName());
 
-            stmt.executeUpdate(consultantQuery.toString());
+            stmt.executeUpdate();
 
         } catch(SQLException se) {
             //Handle errors for JDBC
@@ -227,13 +226,11 @@ public final class DbServer {
 
             stmt = conn.createStatement();
 
-            StringBuilder query = new StringBuilder();
-
             /* Select all consultants */
-            query.append("SELECT last_name, first_name, middle_name ");
-            query.append("FROM consultants");
+            String query = "SELECT last_name, first_name, middle_name " +
+                           "FROM consultants";
 
-            rs = stmt.executeQuery(query.toString());
+            rs = stmt.executeQuery(query);
 
             while (rs.next()) {
                 Name consultantName = new Name(rs.getString("last_name"), rs.getString("first_name"), rs.getString("middle_name"));
@@ -277,7 +274,7 @@ public final class DbServer {
     public void addTimeCard(TimeCard timeCard) throws SQLException {
         Connection conn = null;
         ResultSet rs = null;
-        Statement stmt = null;
+        PreparedStatement stmt = null;
 
         try {
 
@@ -287,17 +284,17 @@ public final class DbServer {
             int consultantId = getConsultantIdByName(timeCard.getConsultant());
 
             /* Insert time card */
-            String tcStartDate = new SimpleDateFormat("MM/dd/yyyy").format(timeCard.getWeekStartingDay()).toString();
-            stmt = conn.createStatement();
-            StringBuilder timeCardQuery = new StringBuilder();
+            Date tcStartDate = new Date(timeCard.getWeekStartingDay().getTime());
 
-            timeCardQuery.append("INSERT INTO timecards (consultant_id, start_date) ");
-            timeCardQuery.append("VALUES (");
-            timeCardQuery.append(consultantId + ", ");
-            timeCardQuery.append("'" + tcStartDate +"'");
-            timeCardQuery.append(")");
+            String timeCardQuery = "INSERT INTO timecards (consultant_id, start_date) " +
+                                   "VALUES (?, ?)";
 
-            stmt.executeUpdate(timeCardQuery.toString(), Statement.RETURN_GENERATED_KEYS);
+            stmt = conn.prepareStatement(timeCardQuery, Statement.RETURN_GENERATED_KEYS);
+
+            stmt.setInt(1, consultantId);
+            stmt.setDate(2, tcStartDate);
+
+            stmt.executeUpdate();
 
             rs = stmt.getGeneratedKeys();
             int timecardId = 0;
@@ -353,7 +350,7 @@ public final class DbServer {
     public void addBillableHours(ConsultantTime time, int timeCardId) throws SQLException {
         Connection conn = null;
         ResultSet rs = null;
-        Statement stmt = null;
+        PreparedStatement stmt = null;
 
         try {
 
@@ -361,21 +358,20 @@ public final class DbServer {
             conn = DriverManager.getConnection(dbUrl, username, password);
 
             /* Insert billable hours */
-            String formattedBillableDate = new SimpleDateFormat("MM/dd/yyyy").format(time.getDate()).toString();
-            stmt = conn.createStatement();
-            StringBuilder billable = new StringBuilder();
+            Date billableDate = new Date(time.getDate().getTime());
 
-            // VALUES ((SELECT DISTINCT id FROM clients WHERE name = 'Acme Industries'), 3, '2005/03/12', 'Software Engineer', 8);
-            billable.append("INSERT INTO billable_hours (client_id, timecard_id, date, skill, hours) ");
-            billable.append("VALUES (");
-            billable.append("(SELECT DISTINCT id FROM clients WHERE name = '" + time.getAccount().getName() + "'), ");
-            billable.append(timeCardId + ", ");
-            billable.append("'" + formattedBillableDate + "', ");
-            billable.append("'" + time.getSkillType() + "', ");
-            billable.append(time.getHours());
-            billable.append(")");
+            String billableQuery = "INSERT INTO billable_hours (client_id, timecard_id, date, skill, hours) " +
+                                   "VALUES ((SELECT DISTINCT id FROM clients WHERE name = ?), ?, ?, ?, ?)";
 
-            stmt.executeUpdate(billable.toString());
+            stmt = conn.prepareStatement(billableQuery);
+
+            stmt.setString(1, time.getAccount().getName());
+            stmt.setInt(2, timeCardId);
+            stmt.setDate(3, billableDate);
+            stmt.setString(4, time.getSkillType().toString());
+            stmt.setInt(5, time.getHours());
+
+            stmt.executeUpdate();
 
         } catch(SQLException se) {
             //Handle errors for JDBC
@@ -407,29 +403,26 @@ public final class DbServer {
      */
     public void addNonBillableHours(ConsultantTime time, int timecardId) throws SQLException {
         Connection conn = null;
-        ResultSet rs = null;
-        Statement stmt = null;
+        PreparedStatement stmt = null;
 
         try {
-
             Class.forName(driverClassName);
             conn = DriverManager.getConnection(dbUrl, username, password);
 
             /* Insert non-billable hours */
-            stmt = conn.createStatement();
-            StringBuilder nonBillable = new StringBuilder();
-            String formattedBillableDate = new SimpleDateFormat("MM/dd/yyyy").format(time.getDate()).toString();
+            Date billableDate = new Date(time.getDate().getTime());
 
-//            VALUES ('VACATION', 1, '2005/03/13', 8);
-            nonBillable.append("INSERT INTO non_billable_hours (account_name, timecard_id, date, hours) ");
-            nonBillable.append("VALUES (");
-            nonBillable.append("'" + time.getAccount() + "', ");
-            nonBillable.append(timecardId + ", ");
-            nonBillable.append("'" + formattedBillableDate + "', ");
-            nonBillable.append(time.getHours());
-            nonBillable.append(")");
+            String nonBillableQuery = "INSERT INTO non_billable_hours (account_name, timecard_id, date, hours) " +
+                                      "VALUES (?, ?, ?, ?)";
 
-            stmt.executeUpdate(nonBillable.toString());
+            stmt = conn.prepareStatement(nonBillableQuery);
+
+            stmt.setString(1, time.getAccount().toString());
+            stmt.setInt(2, timecardId);
+            stmt.setDate(3, billableDate);
+            stmt.setInt(4, time.getHours());
+
+            stmt.executeUpdate();
 
         } catch(SQLException se) {
             //Handle errors for JDBC
@@ -461,8 +454,7 @@ public final class DbServer {
      */
     public int getConsultantIdByName(Consultant consultant) {
         Connection conn = null;
-        ResultSet rs = null;
-        Statement stmt = null;
+        PreparedStatement stmt = null;
 
         try {
 
@@ -470,11 +462,17 @@ public final class DbServer {
             conn = DriverManager.getConnection(dbUrl, username, password);
 
             // Obtain the consultant id, for the consultant (using the name fields)
-            stmt = conn.createStatement();
-            ResultSet consultantResults = stmt.executeQuery("SELECT id FROM consultants WHERE " +
-                                                            "last_name = '" + consultant.getName().getLastName() + "' AND " +
-                                                            "first_name = '" + consultant.getName().getFirstName() + "' AND " +
-                                                            "middle_name = '" + consultant.getName().getMiddleName() + "'");
+            Name consultantName = consultant.getName();
+            String consultantQuery = "SELECT id FROM consultants " +
+                                     "WHERE last_name = ? AND first_name = ? AND middle_name = ?";
+
+            stmt = conn.prepareStatement(consultantQuery);
+
+            stmt.setString(1, consultantName.getLastName());
+            stmt.setString(2, consultantName.getFirstName());
+            stmt.setString(3, consultantName.getMiddleName());
+
+            ResultSet consultantResults = stmt.executeQuery();
 
             int consultantId = -1;
             while (consultantResults.next()) {
@@ -526,7 +524,7 @@ public final class DbServer {
 
         Connection conn = null;
         ResultSet rs = null;
-        Statement stmt = null;
+        PreparedStatement stmt = null;
         Invoice invoice = null;
 
         try{
@@ -535,26 +533,25 @@ public final class DbServer {
             conn = DriverManager.getConnection(dbUrl, username, password);
             invoice = new Invoice(client, month, year);
 
-            stmt = conn.createStatement();
-
-            StringBuilder query = new StringBuilder();
+            DateRange dr = new DateRange(month, year);
+            java.sql.Date startDate = new java.sql.Date(dr.getStartDate().getTime());;
+            java.sql.Date endDate = new java.sql.Date(dr.getEndDate().getTime());;
 
             /* Select invoice items */
+            String tcQuery = "SELECT b.date, c.last_name, c.first_name, c.middle_name, b.skill, s.rate, b.hours " +
+                             "FROM billable_hours b, consultants c, skills s, timecards t " +
+                             "WHERE b.client_id = (SELECT DISTINCT id FROM clients WHERE name = ?) " +
+                             "AND b.skill = s.name AND b.timecard_id = t.id AND c.id = t.consultant_id " +
+                             "AND b.date >= ? " +
+                             "AND b.date <= ?";
 
-            /* BILLABLE */
-            query.append("SELECT b.date, c.last_name, c.first_name, c.middle_name, b.skill, s.rate, b.hours ");
-            query.append("FROM billable_hours b, consultants c, skills s, timecards t ");
-            query.append("WHERE b.client_id = (SELECT DISTINCT id ");
-            query.append("FROM clients ");
-            query.append("WHERE name = '" + client.getName() + "') ");
-            query.append("AND b.skill = s.name ");
-            query.append("AND b.timecard_id = t.id ");
-            query.append("AND c.id = t.consultant_id ");
-//            TODO: work out how to set date params in query
-//            query.append("AND b.date >= '" + year + "-" + mo + "-01'");
-//            query.append("AND b.date <= '" + year + "-" + mo + "-31'");
+            stmt = conn.prepareStatement(tcQuery);
 
-            rs = stmt.executeQuery(query.toString());
+            stmt.setString(1, client.getName());
+            stmt.setDate(2, startDate);
+            stmt.setDate(3, endDate);
+
+            rs = stmt.executeQuery();
 
             while (rs.next()) {
                 // consultant
@@ -577,43 +574,6 @@ public final class DbServer {
             }
 
             rs.close();
-
-            /* NON-BILLABLE */
-//            TODO: Figure out how to get the non-billable line-items for the invoice. The query below is flawed.
-//            query = new StringBuilder();
-//
-//            /* Select invoice items */
-//            query.append("SELECT b.date, b.account_name, s.rate, b.hours ");
-//            query.append("FROM non_billable_hours b, skills s, timecards t ");
-//            query.append("WHERE b.account_name = s.name ");
-//            query.append("AND b.timecard_id = t.id");
-////            query.append("AND b.date >= '" + year + "-" + mo + "-01'");
-////            query.append("AND b.date <= '" + year + "-" + mo + "-31'");
-//
-//            rs = stmt.executeQuery(query.toString());
-//
-//            while (rs.next()) {
-//                // consultant
-//                Name consultantName = new Name(rs.getString("last_name"), rs.getString("first_name"), rs.getString("middle_name"));
-//                Consultant consultant = new Consultant(consultantName);
-//
-//                // date
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.setTime(rs.getDate("date"));
-//                calendar = new GregorianCalendar();
-//                java.util.Date liDate = calendar.getTime();
-//
-//                // skill
-//                Skill liSkill = Skill.valueOf(rs.getString("skill"));
-//
-//                // hours
-//                int liHours = rs.getInt("hours");
-//
-//                InvoiceLineItem li = new InvoiceLineItem(liDate, consultant, liSkill, liHours);
-//                invoice.addLineItem(li);
-//            }
-//
-//            rs.close();
 
         } catch(SQLException se) {
             //Handle errors for JDBC
